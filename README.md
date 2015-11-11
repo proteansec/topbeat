@@ -5,6 +5,7 @@
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Limitations](#limitations)
 - [Configuration Parameters](#configuration-parameters)
 
 # Introduction
@@ -61,6 +62,38 @@ docker run --name topbeat -d --privileged --env 'ELASTICHOSTS="\"host:920\""' -d
 ```
 
 Now you should have the Topbeat running, which will be able to gather information from the system such as system load, disk usage, memory usage, status of processes as well as CPU usage and send it to Elasticsearch.
+
+# Limitations
+
+Running Topbeat in container is limiting due to the fact that you won't be able to monitor per-process statistics, since you'll only be able to see the processes in the current container. Nevertheless, you can monitor other system information if run in privileged mode.
+
+The following is the output of `fdisk -l` command from Topbeat container when run in **non-privileged** mode, where none of the system partitions are visible.
+
+```
+root@49ed624f362b:/# fdisk -l
+root@49ed624f362b:/#
+```
+
+
+The following is the output of `fdisk -l` command from Topbeat container when run in **privileged** mode, where system partitions are visible without any problems, the same as in docker host.
+
+```
+root@d7409f3a954a:/# fdisk -l
+
+Disk /dev/sda: 214.7 GB, 214748364800 bytes
+255 heads, 63 sectors/track, 26108 cylinders, total 419430400 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        4096      266239      131072    c  W95 FAT32 (LBA)
+/dev/sda2               1        4095        2047+  ee  GPT
+
+Partition table entries are not in disk order
+```
+
 
 # Configuration Parameters
 
