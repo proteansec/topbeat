@@ -5,7 +5,7 @@ RUN apt-get update
 RUN apt-get -y -q install libpcap0.8 unzip
 
 # Install TopBeat
-ENV VERSION 1.0.0-beta4
+ENV VERSION 1.2.3
 ADD https://download.elastic.co/beats/topbeat/topbeat_${VERSION}_amd64.deb .
 RUN dpkg -i topbeat_${VERSION}_amd64.deb
 
